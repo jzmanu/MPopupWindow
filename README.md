@@ -2,8 +2,6 @@
 ## MPopupWindow
 一个通用的 PopupWindow，欢迎 star，也可以联系我一起交流学习！
 
-![jzman-blog.jpg](https://upload-images.jianshu.io/upload_images/2494569-14e279a7599028e0.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
 ## PopupWindow 正常的使用方式
 
 ```java
@@ -57,3 +55,7 @@ popupWindow.showPopupWindow(btnTarget, type);
 ## 显示效果
 
 ![MPopupWindow.gif](https://upload-images.jianshu.io/upload_images/2494569-b398342589531f76.gif?imageMogr2/auto-orient/strip)
+
+## 联系我
+
+![jzman-blog.jpg](https://upload-images.jianshu.io/upload_images/2494569-14e279a7599028e0.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
