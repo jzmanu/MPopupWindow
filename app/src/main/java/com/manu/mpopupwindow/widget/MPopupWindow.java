@@ -12,12 +12,10 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
 /**
- * 通用PopupWindow
- *
- * @author: jzman
- * @time: 2018/6/5 0005 10:00
+ * @Desc: MPopupWindow
+ * @Author: jzman
  */
-public class MPopupWindow{
+public class MPopupWindow {
 
     private Context mContext;
     private PopupWindow mPopupWindow;
@@ -31,20 +29,26 @@ public class MPopupWindow{
     private int mHeight;
     private int mOffsetX;
     private int mOffsetY;
-    private int mGravity;
     private boolean mTouchable;
+    private View mTarget;
+    private @TypeGravity int mGravity;
 
-    private MPopupWindow() {}
+    private MPopupWindow() {
+    }
 
-    public void showPopupWindow(View v, LocationType type) {
-        if (mView!=null){
+    public static MPopupWindow.Builder create(Context context) {
+        return new MPopupWindow.Builder(context);
+    }
+
+    public void show() {
+        if (mView != null) {
             mPopupWindow.setContentView(mView);
-        }else if (mLayoutId != -1){
+        } else if (mLayoutId != -1) {
             View contentView = LayoutInflater.from(mContext).inflate(mLayoutId, null);
             mPopupWindow.setContentView(contentView);
         }
-        mPopupWindow.setWidth(mWidth);
-        mPopupWindow.setHeight(mHeight);
+        if (mWidth != 0) mPopupWindow.setWidth(mWidth);
+        if (mHeight != 0) mPopupWindow.setHeight(mHeight);
         mPopupWindow.setBackgroundDrawable(mBackgroundDrawable);
         mPopupWindow.setOutsideTouchable(mOutsideTouchable);
         mPopupWindow.setOnDismissListener(mOnDismissListener);
@@ -52,77 +56,81 @@ public class MPopupWindow{
         mPopupWindow.setTouchable(mTouchable);
 
         int[] locations = new int[2];
-        v.getLocationOnScreen(locations);
+        mTarget.getLocationOnScreen(locations);
         int left = locations[0];
-        int top  =  locations[1];
+        int top = locations[1];
 
         mPopupWindow.getContentView().measure(
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         int popupWidth = mPopupWindow.getContentView().getMeasuredWidth();
         int popupHeight = mPopupWindow.getContentView().getMeasuredHeight();
+        int targetWidth = mTarget.getWidth();
+        int targetHeight = mTarget.getHeight();
 
-        switch (type) {
-            case TOP_LEFT:
-                mPopupWindow.showAtLocation(v,Gravity.NO_GRAVITY,left - popupWidth + mOffsetX,top - popupHeight + mOffsetY);
+        switch (mGravity) {
+            case TypeGravity.TOP_LEFT:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + mOffsetX, top - popupHeight + mOffsetY);
                 break;
-            case TOP_CENTER:
-                int offsetX = (v.getWidth() - popupWidth) / 2;
-                mPopupWindow.showAtLocation(v,Gravity.NO_GRAVITY,left + offsetX + mOffsetX,top - popupHeight + mOffsetY);
+            case TypeGravity.TOP_CENTER:
+                int offsetX = (targetWidth - popupWidth) / 2;
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + offsetX + mOffsetX, top - popupHeight + mOffsetY);
                 break;
-            case TOP_RIGHT:
-                mPopupWindow.showAtLocation(v,Gravity.NO_GRAVITY,left + v.getWidth() + mOffsetX,top - popupHeight + mOffsetY);
-                break;
-
-            case BOTTOM_LEFT:
-                mPopupWindow.showAsDropDown(v, -popupWidth + mOffsetX,mOffsetY);
-                break;
-            case BOTTOM_CENTER:
-                int offsetX1 = (v.getWidth() - popupWidth) / 2;
-                mPopupWindow.showAsDropDown(v,offsetX1 + mOffsetX,mOffsetY);
-                break;
-            case BOTTOM_RIGHT:
-                mPopupWindow.showAsDropDown(v, v.getWidth() + mOffsetX,mOffsetY);
+            case TypeGravity.TOP_RIGHT:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + targetWidth - popupWidth + mOffsetX, top - popupHeight + mOffsetY);
                 break;
 
-            case LEFT_TOP:
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY, left - popupWidth + mOffsetX, top - popupHeight + mOffsetY);
+            case TypeGravity.CENTER:
+                int x = left + (targetWidth - popupWidth) / 2 + mOffsetX;
+                int y = top + (targetHeight - popupHeight) / 2 + mOffsetY;
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, x, y);
                 break;
-            case LEFT_BOTTOM:
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY, left - popupWidth + mOffsetX, top + v.getHeight() + mOffsetY);
+            case TypeGravity.CENTER_LEFT_TOP:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + mOffsetX, top + mOffsetY);
                 break;
-            case LEFT_CENTER:
-                int offsetY = (v.getHeight() - popupHeight) / 2;
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY,left - popupWidth + mOffsetX,top + offsetY + mOffsetY);
+            case TypeGravity.CENTER_LEFT_BOTTOM:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + mOffsetX, top + (targetWidth - popupHeight) + mOffsetY);
+                break;
+            case TypeGravity.CENTER_RIGHT_BOTTOM:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + (targetWidth - popupWidth) + mOffsetX, top + (targetHeight - popupHeight) + mOffsetY);
+                break;
+            case TypeGravity.CENTER_RIGHT_TOP:
+                mPopupWindow.showAtLocation(mTarget, Gravity.NO_GRAVITY, left + (targetWidth - popupWidth) + mOffsetX, top + mOffsetY);
                 break;
 
-            case RIGHT_TOP:
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY, left + v.getWidth() + mOffsetX,top - popupHeight + mOffsetY);
+            case TypeGravity.BOTTOM_LEFT:
+                mPopupWindow.showAsDropDown(mTarget, mOffsetX, mOffsetY);
                 break;
-            case RIGHT_BOTTOM:
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY, left + v.getWidth() + mOffsetX,top + v.getHeight() + mOffsetY);
+            case TypeGravity.BOTTOM_CENTER:
+                int offsetX1 = (targetWidth - popupWidth) / 2;
+                mPopupWindow.showAsDropDown(mTarget, offsetX1 + mOffsetX, mOffsetY);
                 break;
-            case RIGHT_CENTER:
-                int offsetY1 = (v.getHeight() - popupHeight) / 2;
-                mPopupWindow.showAtLocation(v, Gravity.NO_GRAVITY,left + v.getWidth() + mOffsetX,top + offsetY1 + mOffsetY);
+            case TypeGravity.BOTTOM_RIGHT:
+                mPopupWindow.showAsDropDown(mTarget, targetWidth - popupWidth + mOffsetX, mOffsetY);
                 break;
-            case FROM_BOTTOM:
-                mPopupWindow.showAtLocation(v,mGravity,mOffsetX,mOffsetY);
+
+            case TypeGravity.FROM_BOTTOM:
+                if (mWidth == 0) mPopupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+                mPopupWindow.showAtLocation(mTarget, Gravity.BOTTOM, mOffsetX, mOffsetY);
+                break;
+            case TypeGravity.FROM_TOP:
+                if (mWidth == 0) mPopupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+                mPopupWindow.showAtLocation(mTarget, Gravity.TOP, mOffsetX, mOffsetY);
                 break;
         }
     }
 
-    public void dismiss(){
-        if (mPopupWindow!=null){
+    public void dismiss() {
+        if (mPopupWindow != null) {
             mPopupWindow.dismiss();
         }
     }
 
     public static class Builder {
-        private Context context;
+        private final Context context;
         private View contentView;
         private int layoutId;
-        private PopupWindow popupWindow;
+        private final PopupWindow popupWindow;
         private boolean outsideTouchable;
         private Drawable backgroundDrawable;
         private OnDismissListener onDismissListener;
@@ -131,8 +139,9 @@ public class MPopupWindow{
         private int height;
         private int offsetX;
         private int offsetY;
-        private int gravity;
         private boolean touchable;
+        private View target;
+        private @TypeGravity int gravity;
 
         public Builder(Context context) {
             this.context = context;
@@ -140,12 +149,12 @@ public class MPopupWindow{
             this.outsideTouchable = true;
             this.touchable = true;
             this.backgroundDrawable = new ColorDrawable(Color.TRANSPARENT);
-            this.width  = WindowManager.LayoutParams.WRAP_CONTENT;
-            this.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            this.gravity = Gravity.CENTER;
+            this.width = 0;
+            this.height = 0;
             this.layoutId = -1;
             this.offsetX = 0;
             this.offsetY = 0;
+            this.gravity = TypeGravity.CENTER;
         }
 
         public Builder setContentView(View contentView) {
@@ -188,7 +197,7 @@ public class MPopupWindow{
             return this;
         }
 
-        public Builder setGravity(int gravity) {
+        public Builder setGravity(@TypeGravity int gravity) {
             this.gravity = gravity;
             return this;
         }
@@ -208,6 +217,11 @@ public class MPopupWindow{
             return this;
         }
 
+        public Builder setTarget(View target) {
+            this.target = target;
+            return this;
+        }
+
         public MPopupWindow build() {
             MPopupWindow popupWindow = new MPopupWindow();
             setPopupWindowConfig(popupWindow);
@@ -215,51 +229,36 @@ public class MPopupWindow{
         }
 
         private void setPopupWindowConfig(MPopupWindow window) {
-            if (contentView != null && layoutId != -1){
-                throw new MException("setContentView and setLayoutId can't be used together.", "0");
-            }else if (contentView == null && layoutId == -1){
-                throw new MException("contentView or layoutId can't be null.", "1");
-            }
-
             if (context == null) {
-                throw new MException("context can't be null.", "2");
+                throw new MException("context can't be null.");
             } else {
                 window.mContext = this.context;
             }
 
-            window.mWidth  = this.width;
+            if (contentView != null && layoutId != -1) {
+                throw new MException("setContentView and setLayoutId can't be used together.");
+            } else if (contentView == null && layoutId == -1) {
+                throw new MException("contentView or layoutId can't be null.");
+            }
+
+            if (target == null){
+                throw new MException("please set a target view");
+            }
+
+            window.mWidth = this.width;
             window.mHeight = this.height;
             window.mView = this.contentView;
             window.mLayoutId = layoutId;
             window.mPopupWindow = this.popupWindow;
-            window.mOutsideTouchable   = this.outsideTouchable;
+            window.mOutsideTouchable = this.outsideTouchable;
             window.mBackgroundDrawable = this.backgroundDrawable;
-            window.mOnDismissListener  = this.onDismissListener;
+            window.mOnDismissListener = this.onDismissListener;
             window.mAnimationStyle = this.animationStyle;
             window.mTouchable = this.touchable;
             window.mOffsetX = this.offsetX;
             window.mOffsetY = this.offsetY;
+            window.mTarget = this.target;
             window.mGravity = this.gravity;
         }
-    }
-
-    public enum LocationType {
-        TOP_LEFT,
-        TOP_RIGHT,
-        TOP_CENTER,
-
-        BOTTOM_LEFT,
-        BOTTOM_RIGHT,
-        BOTTOM_CENTER,
-
-        RIGHT_TOP,
-        RIGHT_BOTTOM,
-        RIGHT_CENTER,
-
-        LEFT_TOP,
-        LEFT_BOTTOM,
-        LEFT_CENTER,
-
-        FROM_BOTTOM,
     }
 }

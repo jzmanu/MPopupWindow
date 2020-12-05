@@ -1,211 +1,107 @@
-package com.manu.mpopupwindow;
+package com.manu.mpopupwindow
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.Toast;
-
-import com.manu.mpopupwindow.widget.MPopupWindow;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.BOTTOM_CENTER;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.BOTTOM_LEFT;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.BOTTOM_RIGHT;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.FROM_BOTTOM;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.LEFT_BOTTOM;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.LEFT_CENTER;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.LEFT_TOP;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.RIGHT_BOTTOM;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.RIGHT_CENTER;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.RIGHT_TOP;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.TOP_CENTER;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.TOP_LEFT;
-import static com.manu.mpopupwindow.widget.MPopupWindow.LocationType.TOP_RIGHT;
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
+import android.widget.Toast
+import com.manu.mpopupwindow.widget.MPopupWindow
+import com.manu.mpopupwindow.widget.TypeGravity
+import kotlinx.android.synthetic.main.activity_popup_window_sample.*
 
 /**
- * @author: jzman
- * @time: 2018/6/5 0005 13:59
+ * @Desc: MainActivity
+ * @Author: jzman
  */
-public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.btnTopLeft)
-    Button btnTopLeft;
-    @BindView(R.id.btnTopRight)
-    Button btnTopRight;
-    @BindView(R.id.btnBottomLeft)
-    Button btnBottomLeft;
-    @BindView(R.id.btnBottomRight)
-    Button btnBottomRight;
-    @BindView(R.id.btnLeftTop)
-    Button btnLeftTop;
-    @BindView(R.id.btnLeftBottom)
-    Button btnLeftBottom;
-    @BindView(R.id.btnRightTop)
-    Button btnRightTop;
-    @BindView(R.id.btnRightBottom)
-    Button btnRightBottom;
-    @BindView(R.id.btnTarget)
-    Button btnTarget;
-    @BindView(R.id.btnFromBottom)
-    Button btnFromBottom;
-    @BindView(R.id.btnFromTop)
-    Button btnFromTop;
-    @BindView(R.id.btnTopCenter)
-    Button btnTopCenter;
-    @BindView(R.id.btnBottomCenter)
-    Button btnBottomCenter;
-    @BindView(R.id.btnLeftCenter)
-    Button btnLeftCenter;
-    @BindView(R.id.btnRightCenter)
-    Button btnRightCenter;
-
-    View contentView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_popup_window_sample);
-        ButterKnife.bind(this);
-        contentView = LayoutInflater.from(this).inflate(R.layout.popup_window_layout, null);
+class MainActivity : AppCompatActivity(), View.OnClickListener{
+    private lateinit var mTarget: View
+    private lateinit var mContentView:View
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_popup_window_sample)
+        mTarget = findViewById(R.id.ivTarget)
+        mContentView = LayoutInflater.from(this).inflate(R.layout.popup_window_layout, null)
+        btnTopLeft.setOnClickListener(this)
+        btnTopCenter.setOnClickListener(this)
+        btnTopRight.setOnClickListener(this)
+        btnCenter.setOnClickListener(this)
+        btnCenterLeftTop.setOnClickListener(this)
+        btnCenterLeftBottom.setOnClickListener(this)
+        btnCenterRightTop.setOnClickListener(this)
+        btnCenterRightBottom.setOnClickListener(this)
+        btnBottonLeft.setOnClickListener(this)
+        btnBottonCenter.setOnClickListener(this)
+        btnBottonRight.setOnClickListener(this)
+        btnFromTop.setOnClickListener(this)
+        btnFromBottom.setOnClickListener(this)
     }
 
-    @OnClick({R.id.btnTopLeft, R.id.btnTopRight, R.id.btnBottomLeft, R.id.btnBottomRight,
-            R.id.btnLeftTop, R.id.btnLeftBottom, R.id.btnRightTop, R.id.btnRightBottom,
-            R.id.btnFromBottom, R.id.btnFromTop, R.id.btnTopCenter, R.id.btnBottomCenter,
-            R.id.btnLeftCenter, R.id.btnRightCenter, R.id.btnTarget})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btnTopLeft:
-                showPopupWindow(TOP_LEFT);
-                break;
-            case R.id.btnTopRight:
-                showPopupWindow(TOP_RIGHT);
-                break;
-            case R.id.btnTopCenter:
-                showPopupWindow(TOP_CENTER);
-                break;
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.btnTopLeft -> showPopupWindow(TypeGravity.TOP_LEFT)
+            R.id.btnTopCenter -> showPopupWindow(TypeGravity.TOP_CENTER)
+            R.id.btnTopRight -> showPopupWindow(TypeGravity.TOP_RIGHT)
 
-            case R.id.btnBottomLeft:
-                showPopupWindow(BOTTOM_LEFT);
-                break;
-            case R.id.btnBottomRight:
-                showPopupWindow(BOTTOM_RIGHT);
-                break;
-            case R.id.btnBottomCenter:
-                showPopupWindow(BOTTOM_CENTER);
-                break;
+            R.id.btnCenter -> showPopupWindow(TypeGravity.CENTER)
+            R.id.btnCenterLeftTop -> showPopupWindow(TypeGravity.CENTER_LEFT_TOP)
+            R.id.btnCenterLeftBottom -> showPopupWindow(TypeGravity.CENTER_LEFT_BOTTOM)
+            R.id.btnCenterRightTop -> showPopupWindow(TypeGravity.CENTER_RIGHT_TOP)
+            R.id.btnCenterRightBottom -> showPopupWindow(TypeGravity.CENTER_RIGHT_BOTTOM)
 
-            case R.id.btnLeftTop:
-                showPopupWindow(LEFT_TOP);
-                break;
-            case R.id.btnLeftBottom:
-                showPopupWindow(LEFT_BOTTOM);
-                break;
-            case R.id.btnLeftCenter:
-                showPopupWindow(LEFT_CENTER);
-                break;
+            R.id.btnBottonLeft -> showPopupWindow(TypeGravity.BOTTOM_LEFT)
+            R.id.btnBottonCenter -> showPopupWindow(TypeGravity.BOTTOM_CENTER)
+            R.id.btnBottonRight -> showPopupWindow(TypeGravity.BOTTOM_RIGHT)
 
-            case R.id.btnRightTop:
-                showPopupWindow(RIGHT_TOP);
-                break;
-            case R.id.btnRightBottom:
-                showPopupWindow(RIGHT_BOTTOM);
-                break;
-            case R.id.btnRightCenter:
-                showPopupWindow(RIGHT_CENTER);
-                break;
-
-            case R.id.btnFromBottom:
-                showPopupWindowAtBottom(FROM_BOTTOM);
-                break;
-
-            case R.id.btnTarget:
-                showOriginPopupWindow();
-                break;
+            R.id.btnFromTop -> showPopupWindow(TypeGravity.FROM_TOP)
+            R.id.btnFromBottom -> showPopupWindow(TypeGravity.FROM_BOTTOM)
         }
     }
 
-    private void showPopupWindow(MPopupWindow.LocationType type) {
-        MPopupWindow popupWindow = new MPopupWindow
-                .Builder(this)
+    /**
+     * 封装后的使用方式
+     */
+    private fun showPopupWindow(gravity: Int) {
+        MPopupWindow.create(this)
                 .setLayoutId(R.layout.popup_window_layout)
-                .setBackgroundDrawable(new ColorDrawable(Color.GRAY))
+                .setBackgroundDrawable(ColorDrawable(Color.GREEN))
                 .setAnimationStyle(R.style.PopupWindowScaleTheme)
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-//                        Toast.makeText(MainActivity.this, "onDismiss", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-        popupWindow.showPopupWindow(btnTarget, type);
+                .setOnDismissListener {}
+                .setTarget(mTarget)
+                .setGravity(gravity)
+                .build()
+                .show()
     }
 
-    private void showPopupWindowAtBottom(MPopupWindow.LocationType type) {
-        MPopupWindow popupWindow = new MPopupWindow
-                .Builder(this)
-                .setLayoutId(R.layout.popup_window_layout)
-                .setBackgroundDrawable(new ColorDrawable(Color.GRAY))
-                .setWidth(WindowManager.LayoutParams.MATCH_PARENT)
-                .setAnimationStyle(R.style.PopupWindowTranslateThemeFromBottom)
-                .setGravity(Gravity.BOTTOM)
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-//                        Toast.makeText(MainActivity.this, "onDismiss", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-        popupWindow.showPopupWindow(btnTarget, type);
-    }
-
-    private void showOriginPopupWindow() {
-        contentView.findViewById(R.id.tvCamera).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "相机", Toast.LENGTH_SHORT).show();
-            }
-        });
-        contentView.findViewById(R.id.tvPhoto).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "相册", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+    /**
+     * 原来的使用方式
+     */
+    private fun showOriginPopupWindow() {
+        mContentView.findViewById<View>(R.id.tvCamera).setOnClickListener { Toast.makeText(this@MainActivity, "相机", Toast.LENGTH_SHORT).show() }
+        mContentView.findViewById<View>(R.id.tvPhoto).setOnClickListener { Toast.makeText(this@MainActivity, "相册", Toast.LENGTH_SHORT).show() }
         //创建PopupWindow
-        PopupWindow window = new PopupWindow(this);
+        val window = PopupWindow(this)
         //设置显示View
-        window.setContentView(contentView);
+        window.contentView = mContentView
         //设置宽高
-        window.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
-        window.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        window.width = WindowManager.LayoutParams.MATCH_PARENT
+        window.height = WindowManager.LayoutParams.WRAP_CONTENT
         //设置背景
-        window.setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+        window.setBackgroundDrawable(ColorDrawable(Color.GRAY))
         //设置PopupWindow之外的触摸事件
-        window.setOutsideTouchable(true);
+        window.isOutsideTouchable = true
         //设置PopupWindow消失的监听器
-        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //监听PopupWindow的消失
-
-            }
-        });
+        window.setOnDismissListener {
+            //监听PopupWindow的消失
+        }
         //设置PopupWindow上的触摸事件
-        window.setTouchable(true);
+        window.isTouchable = true
         //设置PopupWindow弹出动画
-        window.setAnimationStyle(R.style.PopupWindowTranslateThemeFromBottom);
-        window.showAtLocation(btnTarget, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        window.animationStyle = R.style.PopupWindowTranslateThemeFromBottom
+        window.showAtLocation(mTarget, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 0)
     }
 }
