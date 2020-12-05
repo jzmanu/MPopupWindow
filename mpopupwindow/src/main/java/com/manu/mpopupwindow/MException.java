@@ -1,4 +1,4 @@
-package com.manu.mpopupwindow.widget;
+package com.manu.mpopupwindow;
 
 /**
  * @Desc: 异常

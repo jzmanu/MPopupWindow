@@ -1,4 +1,4 @@
-package com.manu.mpopupwindow.widget;
+package com.manu.mpopupwindow;
 
 import android.content.Context;
 import android.graphics.Color;

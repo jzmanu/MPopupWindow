@@ -3,46 +3,45 @@ package com.manu.mpopupwindow
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.Toast
-import com.manu.mpopupwindow.widget.MPopupWindow
-import com.manu.mpopupwindow.widget.TypeGravity
-import kotlinx.android.synthetic.main.activity_popup_window_sample.*
-
+import androidx.appcompat.app.AppCompatActivity
+import com.manu.mpopupwindow.databinding.ActivityMainBinding
 /**
  * @Desc: MainActivity
  * @Author: jzman
  */
-class MainActivity : AppCompatActivity(), View.OnClickListener{
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mTarget: View
-    private lateinit var mContentView:View
+    private lateinit var mContentView: View
+    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_popup_window_sample)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         mTarget = findViewById(R.id.ivTarget)
         mContentView = LayoutInflater.from(this).inflate(R.layout.popup_window_layout, null)
-        btnTopLeft.setOnClickListener(this)
-        btnTopCenter.setOnClickListener(this)
-        btnTopRight.setOnClickListener(this)
-        btnCenter.setOnClickListener(this)
-        btnCenterLeftTop.setOnClickListener(this)
-        btnCenterLeftBottom.setOnClickListener(this)
-        btnCenterRightTop.setOnClickListener(this)
-        btnCenterRightBottom.setOnClickListener(this)
-        btnBottonLeft.setOnClickListener(this)
-        btnBottonCenter.setOnClickListener(this)
-        btnBottonRight.setOnClickListener(this)
-        btnFromTop.setOnClickListener(this)
-        btnFromBottom.setOnClickListener(this)
+        binding.btnTopLeft.setOnClickListener(this)
+        binding.btnTopCenter.setOnClickListener(this)
+        binding.btnTopRight.setOnClickListener(this)
+        binding.btnCenter.setOnClickListener(this)
+        binding.btnCenterLeftTop.setOnClickListener(this)
+        binding.btnCenterLeftBottom.setOnClickListener(this)
+        binding.btnCenterRightTop.setOnClickListener(this)
+        binding.btnCenterRightBottom.setOnClickListener(this)
+        binding.btnBottonLeft.setOnClickListener(this)
+        binding.btnBottonCenter.setOnClickListener(this)
+        binding.btnBottonRight.setOnClickListener(this)
+        binding.btnFromTop.setOnClickListener(this)
+        binding.btnFromBottom.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.btnTopLeft -> showPopupWindow(TypeGravity.TOP_LEFT)
             R.id.btnTopCenter -> showPopupWindow(TypeGravity.TOP_CENTER)
             R.id.btnTopRight -> showPopupWindow(TypeGravity.TOP_RIGHT)
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             R.id.btnCenterLeftTop -> showPopupWindow(TypeGravity.CENTER_LEFT_TOP)
             R.id.btnCenterLeftBottom -> showPopupWindow(TypeGravity.CENTER_LEFT_BOTTOM)
             R.id.btnCenterRightTop -> showPopupWindow(TypeGravity.CENTER_RIGHT_TOP)
-            R.id.btnCenterRightBottom -> showPopupWindow(TypeGravity.CENTER_RIGHT_BOTTOM)
+            R.id.btnCenterRightBottom -> showPopupWindow(com.manu.mpopupwindow.TypeGravity.CENTER_RIGHT_BOTTOM)
 
             R.id.btnBottonLeft -> showPopupWindow(TypeGravity.BOTTOM_LEFT)
             R.id.btnBottonCenter -> showPopupWindow(TypeGravity.BOTTOM_CENTER)
