@@ -1,5 +1,7 @@
 [![](https://jitpack.io/v/jzmanu/MPopupWindow.svg)](https://jitpack.io/#jzmanu/MPopupWindow)
 
+对应文章：[封装一个通用的PopupWindow](https://juejin.cn/post/6844903857860935694)
+
 ## MPopupWindow
 
 一个通用的 PopupWindow 的封装，欢迎 star！
